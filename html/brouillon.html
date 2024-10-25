@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--Section: Pricing v.1-->
+        <section class="section pb-5 pt-3">
+
+          <!--Section heading-->
+          <h1 class="text-center mb-5 h1 pt-5 mt-5">Our pricing plans</h1>
+          <!--Section description-->
+          <p class="text-center w-responsive mx-auto my-5 grey-text">Lorem ipsum dolor sit amet, consectetur
+            adipisicing elit. Fugit, error amet numquam iure provident voluptate
+            esse quasi, veritatis totam voluptas nostrum quisquam eum porro a pariatur accusamus veniam.</p>
+
+          <!--Grid row-->
+          <div class="row">
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-12 mb-4">
+
+              <!--Pricing card-->
+              <div class="card pricing-card">
+                <!-- Price -->
+                <div class="price header white-text blue lighten-3 rounded-top">
+                  <h2 class="number">10</h2>
+                  <div class="version">
+                    <h5 class="mb-0">Basic</h5>
+                  </div>
+                </div>
+
+                <!--Features-->
+                <div class="card-body striped darker-striped">
+                  <ul>
+                    <li>
+                      <p class="mt-1"><i class="fas fa-check"></i> 20 GB Of Storage</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-check"></i> 2 Email Accounts</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-times"></i> 24h Tech Support</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-times"></i> 300 GB Bandwidth</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-times"></i> User Management </p>
+                    </li>
+                  </ul>
+
+                  <button class="btn btn-blue btn-rounded mb-3">Buy now</button>
+                </div>
+                <!--Features-->
+
+              </div>
+              <!--Pricing card-->
+
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-6 mb-4">
+
+              <!--Pricing card-->
+              <div class="card pricing-card">
+                <!-- Price -->
+                <div class="price header white-text blue lighten-3 rounded-top">
+                  <h2 class="number">20</h2>
+                  <div class="version">
+                    <h5 class="mb-0">Pro</h5>
+                  </div>
+                </div>
+
+                <!--Features-->
+                <div class="card-body striped darker-striped">
+                  <ul>
+                    <li>
+                      <p class="mt-1"><i class="fas fa-check"></i> 20 GB Of Storage</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-check"></i> 4 Email Accounts</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-check"></i> 24h Tech Support</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-times"></i> 300 GB Bandwidth</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-times"></i> User Management </p>
+                    </li>
+                  </ul>
+
+                  <button class="btn btn-blue btn-rounded mb-3">Buy now</button>
+                </div>
+                <!--Features-->
+
+              </div>
+              <!--Pricing card-->
+
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-6 mb-4">
+              <!--Pricing card-->
+              <div class="card pricing-card">
+                <!-- Price -->
+                <div class="price header white-text blue lighten-3 rounded-top">
+                  <h2 class="number">30</h2>
+                  <div class="version">
+                    <h5 class="mb-0">Enterprise</h5>
+                  </div>
+                </div>
+
+                <!--Features-->
+                <div class="card-body striped darker-striped">
+                  <ul>
+                    <li>
+                      <p class="mt-1"><i class="fas fa-check"></i> 30 GB Of Storage</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-check"></i> 5 Email Accounts</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-check"></i> 24h Tech Support</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-check"></i> 300 GB Bandwidth</p>
+                    </li>
+                    <li>
+                      <p><i class="fas fa-check"></i> User Management </p>
+                    </li>
+                  </ul>
+
+                  <button class="btn btn-blue btn-rounded mb-3">Buy now</button>
+                </div>
+                <!--Features-->
+
+              </div>
+              <!--Pricing card-->
+            </div>
+            <!--Grid column-->
+
+          </div>
+          <!--Grid row-->
+
+        </section>
+        <!--Section: Pricing v.1-->
+</body>
+</html>
+
+Le modele de la base de données
+from django.db import models
+from django.contrib.auth.models import User
+
+class Partenaire(models.Model):
+    nom = models.CharField(max_length=100)
+    logo = models.ImageField(upload_to='partenaires')
+    lien = models.URLField()
+
+    def __str__(self):
+        return self.nom
+
+class Article(models.Model):
+    titre = models.CharField(max_length=200)
+    contenu = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    auteur = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='articles', blank=True, null=True)
+
+    def __str__(self):
+        return self.titre
+
+class Commentaire(models.Model):
+    article = models.ForeignKey(Article, related_name='commentaires', on_delete=models.CASCADE)
+    auteur = models.ForeignKey(User, on_delete=models.CASCADE)
+    contenu = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.auteur} - {self.article}"
+
+class Like(models.Model):
+    article = models.ForeignKey(Article, related_name='likes', on_delete=models.CASCADE)
+    utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.utilisateur} - {self.article}"
+
+class Newsletter(models.Model):
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.email
+
+
+Les vues de configuration
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
+from .models import Partenaire, Article, Commentaire, Like, Newsletter
+from .forms import CommentaireForm, NewsletterForm
+
+class PartenaireListView(ListView):
+    model = Partenaire
+    template_name = 'partenaires.html'
+    context_object_name = 'partenaires'
+
+class ArticleListView(ListView):
+    model = Article
+    template_name = 'articles.html'
+    context_object_name = 'articles'
+    paginate_by = 10
+
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = 'article_detail.html'
+    context_object_name = 'article'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['commentaires'] = Commentaire.objects.filter(article=self.object)
+        context['commentaire_form'] = CommentaireForm()
+        context['liked'] = Like.objects.filter(article=self.object, utilisateur=self.request.user).exists()
+        return context
+
+def article_comment(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    if request.method == 'POST':
+        form = CommentaireForm(request.POST)
+        if form.is_valid():
+            commentaire = form.save(commit=False)
+            commentaire.article = article
+            commentaire.auteur = request.user
+            commentaire.save()
+            return redirect('article_detail', pk=article.pk)
+    else:
+        form = CommentaireForm()
+    return render(request, 'article_detail.html', {'form': form})
+
+def article_like(request):
+    article = get_object_or_404(Article, id=request.POST.get('article_id'))
+    liked = False
+    if article.likes.filter(utilisateur=request.user).exists():
+        article.likes.remove(request.user)
+        liked = False
+    else:
+        article.likes.add(request.user)
+        liked = True
+    return JsonResponse({'liked': liked})
+
+def newsletter_subscribe(request):
+    if request.method == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            newsletter, created = Newsletter.objects.get_or_create(email=email)
+            if created:
+                return JsonResponse({'subscribed': True})
+            else:
+                return JsonResponse({'subscribed': False})
+    else:
+        form = NewsletterForm()
+    return render(request, 'newsletter_form.html', {'form': form})
+
+Les urls pour les chemins de logiques
+
+from django.urls import path
+from .views import PartenaireListView, ArticleListView, ArticleDetailView, article_comment, article_like, newsletter_subscribe
+
+urlpatterns = [
+    path('partenaires/', PartenaireListView.as_view(), name='partenaires'),
+    path('articles/', ArticleListView.as_view(), name='articles'),
+    path('articles/<int:pk>/', ArticleDetailView.as_view(), name='article_detail'),
+    path('articles/<int:pk>/comment/', article_comment, name='article_comment'),
+    path('articles/like/', article_like, name='article_like'),
+    path('newsletter/', newsletter_subscribe, name='newsletter_subscribe'),
+]
+
+
+    Les forms pour le saving
+
+    from django import forms
+from .models import Commentaire, Newsletter
+
+class CommentaireForm(forms.ModelForm):
+    class Meta:
+        model = Commentaire
+        fields = ['contenu']
+        widgets = {
+            'contenu': forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+        }
+
+class NewsletterForm(forms.ModelForm):
+    class Meta:
+        model = Newsletter
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'})
+        }
+
+        Bonjour, je vais essayer de vous aider à rédiger une liste de services offerts dans une clinique moderne. Voici un exemple possible de liste :
+
+Consultations médicales générales et spécialisées
+Examens de laboratoire et d’imagerie médicale
+Soins infirmiers et paramédicaux
+Vaccinations et dépistages
+Prévention et éducation à la santé
+Suivi des maladies chroniques et des traitements
+Urgences mineures et soins ambulatoires
+Chirurgie ambulatoire et anesthésie locale
+Réadaptation physique et ergothérapie
+Psychologie et soutien psychosocial
+
+        partenaires
+
+        <!-- Card -->
+              <div class="card card-cascade narrower card-ecommerce d-flex mb-5 col-3 ml-3">
+
+                <!-- Card image -->
+                <div class="view view-cascade overlay">
+                  <img src="https://mdbootstrap.com/img/Mockups/Horizontal/6-col/pro-pricing.jpg" class="img-fluid" alt="">
+                  <a href="#">
+                    <div class="mask"></div>
+                  </a>
+                </div>
+
+                <!-- Card content -->
+                <div class="card-body card-body-cascade">
+
+                  <!-- Title -->
+                  <h4 class="card-title">Project name</h4>
+
+                  <!-- Text -->
+                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                    card's
+                    content.
+                  </p>
+
+                </div>
+
+                <!-- Card footer -->
+                <div class="card-footer links-light">
+
+                  <span class="float-left pt-2">
+                    <a><i class="fas fa-share-alt mr-2"></i></a>
+                    <a><i class="fas fa-heart-o mr-2"></i>10</a>
+                  </span>
+
+                  <span class="float-right">
+                    <a href="" class="waves-effect p-2">Live Preview <i class="far fa-image ml-1"></i></a>
+                  </span>
+
+                </div>
+
+              </div>
+              <!-- Card -->
+
+
+
+        <hr class="mt-5">
+
+                                        <!--Comments-->
+                                        <section>
+
+                                            <!--Main wrapper-->
+                                            <div class="comments-list text-center text-md-left">
+                                                <div class="section-heading mt-5 mb-5">
+                                                    <h4 class="font-weight-bold mt-5 mb-5 text-center">
+                                                        <strong>Comments</strong>
+                                                    </h4>
+                                                </div>
+                                                <!--First row-->
+                                                <div class="row mb-4">
+                                                    <!--Image column-->
+                                                    <div class="col-sm-2 col-12 mb-md-0 mb-3">
+                                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img (8).jpg" class="avatar rounded-circle z-depth-1-half">
+                                                    </div>
+                                                    <!--/.Image column-->
+                                                    <!--Content column-->
+                                                    <div class="col-sm-10 col-12">
+                                                        <a>
+                                                            <h4 class="font-weight-bold">Tom Smith</h4>
+                                                        </a>
+                                                        <div class="mt-2">
+                                                            <ul class="list-unstyled ">
+                                                                <li class="comment-date">
+                                                                    <i class="far fa-clock"></i> 05/10/2015</li>
+                                                            </ul>
+                                                        </div>
+                                                        <p class="grey-text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
+                                                            aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+                                                            sint occaecat cupidatat non proident.</p>
+                                                    </div>
+                                                    <!--/.Content column-->
+                                                </div>
+                                                <!--/.First row-->
+                                                <!--Second row-->
+                                                <div class="row mb-4">
+                                                    <!--Image column-->
+                                                    <div class="col-sm-2 col-12 mb-md-0 mb-3">
+                                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img (30).jpg" class="avatar rounded-circle z-depth-1-half">
+                                                    </div>
+                                                    <!--/.Image column-->
+                                                    <!--Content column-->
+                                                    <div class="col-sm-10 col-12">
+                                                        <a>
+                                                            <h4 class="font-weight-bold">Marta Tev</h4>
+                                                        </a>
+                                                        <div class="mt-2">
+                                                            <ul class="list-unstyled ">
+                                                                <li class="comment-date">
+                                                                    <i class="far fa-clock"></i> 08/10/2015</li>
+                                                            </ul>
+                                                        </div>
+                                                        <p class="grey-text">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
+                                                            eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
+                                                            ipsam voluptatem quia voluptas.</p>
+                                                    </div>
+                                                    <!--/.Content column-->
+                                                </div>
+                                                <!--/.Second row-->
+                                                <!--Third row-->
+                                                <div class="row mb-4">
+                                                    <!--Image column-->
+                                                    <div class="col-sm-3 col-md-2 col-12 mb-md-0 mb-3">
+                                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img (28).jpg" class="avatar rounded-circle z-depth-1-half">
+                                                    </div>
+                                                    <!--/.Image column-->
+                                                    <!--Content column-->
+                                                    <div class="col-sm-9 col-md-10 col-12">
+                                                        <a>
+                                                            <h4 class="font-weight-bold">Anna Maria</h4>
+                                                        </a>
+                                                        <div class="mt-2">
+                                                            <ul class="list-unstyled ">
+                                                                <li class="comment-date">
+                                                                    <i class="far fa-clock"></i> 17/10/2015</li>
+                                                            </ul>
+                                                        </div>
+                                                        <p class="grey-text">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque
+                                                            corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt
+                                                            in culpa qui officia.
+                                                        </p>
+                                                    </div>
+                                                    <!--/.Content column-->
+                                                </div>
+                                                <!--/.Third row-->
+                                            </div>
+                                            <!--/.Main wrapper-->
+
+                                        </section>
+                                        <!--/Comments-->
+                                        <hr>
+                                        <!--Section: Leave a reply (Not Logged In User)-->
+                                        <section class="mb-4 wow fadeIn" data-wow-delay="0.2s">
+                                            <h3 class="font-weight-bold text-center my-5">Leave a reply</h3>
+
+                                            <!--Grid row-->
+                                            <div class="row">
+
+                                                <!--Grid column-->
+                                                <div class="col-lg-4 col-md-12 mb-4">
+
+                                                    <div class="input-group md-form form-sm form-3 pl-0">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text white black-text" id="basic-addon8">1</span>
+                                                        </div>
+                                                        <input type="text" class="form-control mt-0 black-border rgba-white-strong" placeholder="Name" aria-describedby="basic-addon9">
+                                                    </div>
+
+                                                </div>
+                                                <!--Grid column-->
+
+                                                <!--Grid column-->
+                                                <div class="col-lg-4 col-md-6 mb-4">
+
+                                                    <div class="input-group md-form form-sm form-3 pl-0">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text white black-text" id="basic-addon9">2</span>
+                                                        </div>
+                                                        <input type="text" class="form-control mt-0 black-border rgba-white-strong" placeholder="Email" aria-describedby="basic-addon9">
+                                                    </div>
+
+                                                </div>
+                                                <!--Grid column-->
+
+                                                <!--Grid column-->
+                                                <div class="col-lg-4 col-md-6 mb-4">
+
+                                                    <div class="input-group md-form form-sm form-3 pl-0">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text white black-text" id="basic-addon10">3</span>
+                                                        </div>
+                                                        <input type="text" class="form-control mt-0 black-border rgba-white-strong" placeholder="Website" aria-describedby="basic-addon9">
+                                                    </div>
+
+                                                </div>
+                                                <!--Grid column-->
+
+                                            </div>
+                                            <!--Grid row-->
+
+                                            <!--Grid row-->
+                                            <div class="row">
+
+                                                <div class="col-12 mt-1">
+                                                    <div class="form-group basic-textarea rounded-corners shadow-textarea">
+
+                                                        <textarea class="form-control" id="exampleFormControlTextarea6" rows="5" placeholder="Write something here..."></textarea>
+                                                    </div>
+
+                                                    <div class="text-right">
+                                                        <button class="btn pink-gradient btn-rounded waves-effect waves-light">Submit</button>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <!--Grid row-->
+
+                                        </section>
+                                        <!--/Section: Leave a reply (Not Logged In User)-->
